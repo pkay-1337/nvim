@@ -1,0 +1,126 @@
+windows:
+	split:
+		Horizontal:
+			CTRL-W s						*CTRL-W_s*
+			CTRL-W S						*CTRL-W_S*
+			CTRL-W CTRL-S						*CTRL-W_CTRL-S*
+			:[N]sp[lit] [++opt] [+cmd] [file]			*:sp* *:split*
+			eg:- :sp nvim_notes.txt
+
+		Vertical:
+				CTRL-W CTRL-V						*CTRL-W_CTRL-V*
+				CTRL-W v						*CTRL-W_v*
+				:[N]vs[plit] [++opt] [+cmd] [file]			*:vs* *:vsplit*
+				eg:- :vs nvim_notes.txt
+
+		New File (horizontal) :
+				CTRL-W n						*CTRL-W_n*
+				CTRL-W CTRL-N						*CTRL-W_CTRL-N*
+				:[N]new [++opt] [+cmd]					*:new*
+				:[N]new [++opt] [+cmd] {file}
+				:[N]sp[lit] [++opt] [+cmd] {file}			*:split_f*
+				eg:- :sp nvim_notes.txt
+
+		New File (vertical) :
+				:[N]vne[w] [++opt] [+cmd] [file]			*:vne* *:vnew*
+				eg:- :vne nvim_notes.txt
+		
+		Misc:
+				:[N]sf[ind] [++opt] [+cmd] {file}
+						Same as ":split", but search for {file} in 'path' like in
+						|:find|.  Doesn't split if {file} is not found.
+				eg:- :sf nvim_notes.txt
+
+				:vert[ical] {cmd} - open cmd in vertical split like :help
+
+    Closing a window
+		:q[uit]
+		:{count}q[uit]						*:count_quit*
+		CTRL-W q						*CTRL-W_q*
+		CTRL-W CTRL-Q						*CTRL-W_CTRL-Q*
+		:q!
+
+
+		:[count]fc[lose][!]				:fc :dclose
+				Close [count] floating windows with the highest zindex values.
+				'!' to close all floating windows.
+
+
+    Moving cursor to other windows			*window-move-cursor*
+		CTRL-W <Down>					*CTRL-W_<Down>*
+		CTRL-W CTRL-J					*CTRL-W_CTRL-J* *CTRL-W_j*
+		CTRL-W j	Move cursor to Nth window below current one.  Uses the cursor
+		
+		CTRL-W <Up>					*CTRL-W_<Up>*
+		CTRL-W CTRL-K					*CTRL-W_CTRL-K* *CTRL-W_k*
+		CTRL-W k	Move cursor to Nth window above current one.  Uses the cursor
+
+		CTRL-W <Left>					*CTRL-W_<Left>*
+		CTRL-W CTRL-H					*CTRL-W_CTRL-H*
+		CTRL-W <BS>					*CTRL-W_<BS>* *CTRL-W_h*
+		CTRL-W h	Move cursor to Nth window left of current one.  Uses the
+
+		CTRL-W <Right>					*CTRL-W_<Right>*
+		CTRL-W CTRL-L					*CTRL-W_CTRL-L* *CTRL-W_l*
+		CTRL-W l	Move cursor to Nth window right of current one.  Uses the
+
+		CTRL-W w					*CTRL-W_w* *CTRL-W_CTRL-W*
+		CTRL-W CTRL-W	
+		CTRL-W W	
+		
+    Window resizing:
+		CTRL-W =	Make all windows (almost) equally high and wide
+
+		:res[ize] -N					*:res* *:resize* *CTRL-W_-*
+		CTRL-W -	Decrease current window height by N (default 1).
+				If used after |:vertical|: decrease width by N.
+
+		:res[ize] +N					*CTRL-W_+*
+		CTRL-W +	Increase current window height by N (default 1).
+				If used after |:vertical|: increase width by N.
+
+		CTRL-W <	Decrease current window width by N (default 1).
+		CTRL-W >	Increase current window width by N (default 1).
+
+    Moving window around:
+		CTRL-W r
+		CTRL-W R
+		CTRL-W x
+		CTRL-W CTRL-X
+		CTRL-W K	Move the current window to be at the very top, using the full
+		CTRL-W J	Move the current window to be at the very bottom, using the
+		CTRL-W H	Move the current window to be at the far left, using the
+		CTRL-W L	Move the current window to be at the far right, using the full
+		CTRL-W T	Move the current window to a new tab page.  This fails if
+
+    Do a command in all buffers or windows			*list-repeat*
+		:[range]windo {cmd}		Execute {cmd} in each |focusable| window, or only for
+		:[range]bufdo[!] {cmd}	Execute {cmd} in each buffer in the buffer list or if
+
+
+    Buffers:
+		:files[!] [flags]				*:files*
+		:buffers[!] [flags]				*:buffers* *:ls*
+		:ls[!] [flags]
+
+		Add file to buffer list	
+				:bad[d] [+lnum] {fname} 		
+
+		Delete buffer:
+				:[N]bd[elete][!]			
+				:bd[elete][!] [N]
+
+		Edit buffer :
+				:[N]b[uffer][!] [+cmd] [N]	
+				:[N]b[uffer][!] [+cmd] {bufname}	
+
+		Go to [N]th next buffer in buffer list.
+				:[N]bn[ext][!] [+cmd] [N]	
+
+
+
+
+
+
+
+
