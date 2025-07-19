@@ -1,16 +1,166 @@
 All commands in : index.txt
 
+1. Motions and operators				*operator*
+	The motion commands can be used after an operator command, to have the command
+	operate on the text that was moved over.  That is the text between the cursor
+	position before and after the motion.
+		|c|	c	change
+		|d|	d	delete
+		|y|	y	yank into register (does not change the text)
+		|~|	~	swap case (only if 'tildeop' is set)
+		|g~|	g~	swap case
+		|gu|	gu	make lowercase
+		|gU|	gU	make uppercase
+		|!|	!	filter through an external program
+		|=|	=	filter through 'equalprg' or C-indenting if empty
+		|gq|	gq	text formatting
+		|gw|	gw	text formatting with no cursor movement
+		|g?|	g?	ROT13 encoding
+		|>|	>	shift right
+		|<|	<	shift left
+		|zf|	zf	define a fold
+		|g@|	g@	call function set with the 'operatorfunc' option
+
+
+	2. Left-right motions					*left-right-motions*
+		left -> h, ctrl-h
+		right -> l, space
+	 	first char of line - 0
+	 	first non-blank char of line - ^
+		last char of line - $
+		to a clumnn - [N]|
+		to a specific char to the right - f{char}
+		to a specific char to the left - F{char}
+		Repeat F, f - ; ,
+
+	3. Up-down motions					*up-down-motions*
+		k - up
+		j - down
+		G - goto line, Default LAST LINE
+		gg - goto line, First Line
+		{N}% - goto N% of the file
+
+	4. Word motions						*word-motions*
+		w - word forword
+		W - Words forword
+		b - word backword
+		B - Words backward
+
+		e - forword to end of word
+		ge - backword
+		
+	5. Text object motions					*object-motions*
+		( - sentences backword
+		) - sentences forword
+		{ - paragraph backword
+		} - paragraph forword
+
+	6. Text object selection			*object-select* *text-objects*
+		used with operator or in visual mode
+		aw - a word
+		aW - a WORD
+		iw - inner word
+		iW
+		as - a sentence
+		is - inner sentence
+		ap - a paragraph
+		ip - inner paragraph
+
+		a[
+		a] - a [] block
+
+		i[
+		i] - i [] block
+
+		similar for () and {} and <>
+
+		ab - a () block 
+		ib - inner () block
+
+		aB - a {} block 
+		iB - inner {} block
+
+		a"
+		a'
+a`
+		i"
+		i'
+		i`
+
+		ab - a () block 
+		ib - inner () block
+		ab - a () block 
+		ib - inner () block
+		
+	7. Marks					*mark-motions* *E20* *E78*
+
+		m{a-zA-Z} - mark a point
+		`{a-zA-Z} - jump to mark
+		'{a-zA-Z} - jump to mark
+
+		`` 
+		'' - goes to last point
+
+		'. - to the position of last change
+		
+		:marks - list marks
+		:delm {mark} - delete
+
+	8. Jumps					*jump-motions*
+
+		CTRL-O - go back in postion history
+		CTRL-I - go forword in postion history
+		:cle - clear jump list
+
+		[( - goto previous unmatched (
+		[{ - goto previous unmatched {
+
+Scrolling:
+	CTRL-D - down half a page
+	CTRL-U - up half a page
+
+Insert :
+	a - append after cursor
+	A - append at end of line
+	i - insert at cursor
+	I - insert at begining
+	
+	o 
+	O
+
+Delete:
+	["reg] x
+	["reg] X
+	["reg] d
+	["reg] d {motion}
+	["reg] dd
+	["reg] D - till EOL
+
+Delete and insert:
+	R - 
+	c{motion} - delete and insert
+	cc - delete line and insert
+	
+
+
+
+	
+		
+		
+		
+
+
 Lua :
 
 	Vim commands                                            *lua-guide-vim-commands*
 
 		To run an arbitrary Vim command from Lua, pass it as a string to |vim.cmd()|:
 		>lua
-			vim.cmd("colorscheme habamax")
+			vim.cmd("colou[test]scheme habamax")
 		<
 
-		If you want to build your Vim command programmatically, the following form can
-		be useful (all these are equivalent to the corresponding line above):
+			If you want to build your Vim command programmatically, the following form can
+			be useful (all these are equivalent to the corresponding line above):
 		>lua
 			vim.cmd.colorscheme("habamax")
 			vim.cmd.highlight({ "Error", "guibg=red" })
@@ -135,12 +285,12 @@ Lua :
 			  return '<down>'
 			end, { expr = true })
 		<
-		• `desc`: A string that is shown when listing mappings with, e.g., |:map|.
-		  This is useful since Lua functions as {rhs} are otherwise only listed as
-		  `Lua: <number> <source file>:<line>`. Plugins should therefore always use this
-		  for mappings they create. >lua
+		• `desc`:  >lua
 			vim.keymap.set('n', '<Leader>pl1', require('plugin').action,
 			  { desc = 'Execute action from plugin' })
+
+		• `remap`: set `remap = true`: >lua
+			vim.keymap.set('n', 'e', '<Leader>ex1', { remap = true })
 
 	Removing mappings                                       *lua-guide-mappings-del*
 
@@ -149,7 +299,71 @@ Lua :
 			vim.keymap.del('n', '<Leader>ex1')
 			vim.keymap.del({'n', 'c'}, '<Leader>ex2', {buffer = true})
 
+	Creating autocommands             (autocmd.txt)              
+	
+		Autocommands are created using `vim.api.`|nvim_create_autocmd()|, which takes
+		two mandatory arguments:
+		• {event}: a string or table of strings containing the event(s) which should
+				   trigger the command or function.
+		• {opts}:  a table with keys that control what should happen when the event(s)
+				   are triggered.
 
+		The most important options are:
+
+		• `pattern`:  A string or table of strings containing the |autocmd-pattern|.
+					Note: Environment variable like `$HOME` and `~` are not automatically
+					expanded; you need to explicitly use `vim.fn.`|expand()| for this.
+		• `command`:  A string containing a Vim command.
+		• `callback`: A Lua function.
+
+		You must specify one and only one of `command` and `callback`. If `pattern` is
+		omitted, it defaults to `pattern = '*'`.
+		Examples:
+		>lua
+			vim.api.nvim_create_autocmd({"BufEnter", "BufWinEnter"}, {
+			  pattern = {"*.c", "*.h"},
+			  command = "echo 'Entering a C or C++ file'",
+			})
+
+			-- Same autocommand written with a Lua function instead
+			vim.api.nvim_create_autocmd({"BufEnter", "BufWinEnter"}, {
+			  pattern = {"*.c", "*.h"},
+			  callback = function() print("Entering a C or C++ file") end,
+			})
+
+			-- User event triggered by MyPlugin
+			vim.api.nvim_create_autocmd("User", {
+			  pattern = "MyPlugin",
+			  callback = function() print("My Plugin Works!") end,
+			})
+		<
+
+	Grouping autocommands                            
+
+		local mygroup = vim.api.nvim_create_augroup('vimrc', { clear = true })
+		vim.api.nvim_create_autocmd({ 'BufNewFile', 'BufRead' }, {
+		  pattern = '*.html',
+		  group = mygroup,
+		  command = 'set shiftwidth=4',
+		})
+		vim.api.nvim_create_autocmd({ 'BufNewFile', 'BufRead' }, {
+		  pattern = '*.html',
+		  group = 'vimrc',  -- equivalent to group=mygroup
+		 command = 'set expandtab',
+		})
+
+	Deleting autocommands                            *lua-guide-autocommands-delete*
+		-- Delete all BufEnter and InsertLeave autocommands
+		vim.api.nvim_clear_autocmds({event = {"BufEnter", "InsertLeave"}})
+
+		-- Delete all autocommands that uses "*.py" pattern
+		vim.api.nvim_clear_autocmds({pattern = "*.py"})
+
+		-- Delete all autocommands in group "scala"
+		vim.api.nvim_clear_autocmds({group = "scala"})
+
+		-- Delete all ColorScheme autocommands in current buffer
+		vim.api.nvim_clear_autocmds({event = "ColorScheme", buffer = 0 })
 
 
 windows:
@@ -222,7 +436,7 @@ windows:
 		CTRL-W CTRL-W	
 		CTRL-W W	
 		
-    Window resizing:
+Window resizing:
 		CTRL-W =	Make all windows (almost) equally high and wide
 
 		:res[ize] -N					*:res* *:resize* *CTRL-W_-*
