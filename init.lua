@@ -45,3 +45,21 @@ vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = 'Find Files' })
 vim.keymap.set('n', '<leader>fg', builtin.live_grep, { desc = 'Live Grep' })
 vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = 'Buffers' })
 vim.keymap.set('n', '<leader>fp', builtin.current_buffer_fuzzy_find, { desc = 'Search in File' })
+
+-- c format
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "c", "cpp" },
+  callback = function(args)
+    -- Tell clang-format to use 4 spaces
+    local format_cmd = 'clang-format -style="{IndentWidth: 4}"'
+    
+    vim.bo[args.buf].formatprg = format_cmd
+    vim.bo[args.buf].equalprg = format_cmd
+
+    vim.keymap.set("n", "<leader>f", function()
+      local view = vim.fn.winsaveview()
+      vim.cmd("normal! gg=G")
+      vim.fn.winrestview(view)
+    end, { buffer = args.buf, desc = "Format C/C++ file" })
+  end,
+})
