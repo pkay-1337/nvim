@@ -1,0 +1,4 @@
+# Native pack dir: plugin repos are NOT versioned (58M+, nested git repos).
+# setup.sh re-creates them from pinned refs on any system.
+# pack/versions.txt IS tracked — it records those pins.
+pack/vendor/

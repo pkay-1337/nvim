@@ -1,0 +1,12 @@
+blink.cmp: 78336bc v1.10.2
+friendly-snippets: 6cd7280 HEAD
+gruvbox.nvim: 154eb5f 2.0.0-122-g154eb5f
+nvim-lspconfig: 16286347 v2.11.0-63-g16286347
+nvim-man: 7fe6b3b v0.3.0-1-g7fe6b3b
+nvim-tree.lua: 531b807 v1
+nvim-treesitter: 9a168f63 main
+nvim-web-devicons: 5f032a8 nerd-v3.2-compat-90-g5f032a8
+plenary.nvim: 74b06c6 v0.1.4-40-g74b06c6
+telescope.nvim: 5255aa2 v0.2.2
+which-key.nvim: 3aab214 HEAD
+lazydev.nvim: ff2cbcb stable-7-gff2cbcb
