@@ -134,21 +134,26 @@ vim.lsp.enable("clangd")
 -- nvim-lspconfig repo only ships configs; no setup() call needed.
 
 -- Useful LSP keys once a server attaches (clangd included).
--- gd = jump to definition, grr = references, grn = rename,
--- gra = code action, K = hover, [d / ]d = diagnostics,
--- <leader>ch = switch header/source (clangd only, <leader>c Code group).
+-- Native: gd definition, grr references, grn rename, gra action,
+-- K hover, [d / ]d diagnostics.
+-- Mirrored under <leader>c (Code group) for discoverability.
 vim.api.nvim_create_autocmd("LspAttach", {
   callback = function(args)
     local map = function(mode, lhs, rhs, desc)
       vim.keymap.set(mode, lhs, rhs, { buffer = args.buf, desc = desc })
     end
     map("n", "gd", vim.lsp.buf.definition, "Go to definition")
-    map("n", "K", vim.lsp.buf.hover, "Hover docs")
+    map("n", "K", function() require("tools.hover").show() end, "Hover docs")
     map("n", "grr", vim.lsp.buf.references, "References")
     map("n", "grn", vim.lsp.buf.rename, "Rename")
     map("n", "gra", vim.lsp.buf.code_action, "Code action")
     map("n", "[d", vim.diagnostic.goto_prev, "Prev diagnostic")
     map("n", "]d", vim.diagnostic.goto_next, "Next diagnostic")
+    map("n", "<leader>cd", vim.lsp.buf.definition, "Go to definition")
+    map("n", "<leader>cr", vim.lsp.buf.references, "References")
+    map("n", "<leader>cn", vim.lsp.buf.rename, "Rename symbol")
+    map("n", "<leader>ca", vim.lsp.buf.code_action, "Code action")
+    map("n", "<leader>ck", function() require("tools.hover").show() end, "Hover docs")
     local client = vim.lsp.get_client_by_id(args.data.client_id)
     if client and client.name == "clangd" then
       map("n", "<leader>ch", "<cmd>ClangdSwitchSourceHeader<CR>", "Switch header/source")

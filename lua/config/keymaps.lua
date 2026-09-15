@@ -9,6 +9,22 @@ local ok_tb, builtin = pcall(require, "telescope.builtin")
 vim.keymap.set("n", "<leader>bn", ":bn<CR>", { desc = "Next buffer" })
 vim.keymap.set("n", "<leader>bp", ":bp<CR>", { desc = "Prev buffer" })
 vim.keymap.set("n", "<leader>bd", ":bd!<CR>", { desc = "Kill buffer" })
+-- Kill all buffers except the current one (like :only for windows).
+-- Modified buffers are kept; count is reported.
+vim.keymap.set("n", "<leader>bo", function()
+  local cur = vim.api.nvim_get_current_buf()
+  local killed, kept = 0, 0
+  for _, b in ipairs(vim.api.nvim_list_bufs()) do
+    if b ~= cur and vim.fn.buflisted(b) == 1 then
+      if pcall(vim.api.nvim_buf_delete, b, {}) then
+        killed = killed + 1
+      else
+        kept = kept + 1
+      end
+    end
+  end
+  vim.notify(("killed %d buffer(s)%s"):format(killed, kept > 0 and (", kept " .. kept .. " modified") or ""))
+end, { desc = "Kill other buffers" })
 -- (<leader>bb list lives with Telescope below, next to the other pickers)
 
 -- Explorer + terminal
@@ -48,7 +64,19 @@ vim.keymap.set({ "n", "i", "v" }, "<C-s>", "<cmd>w<CR><Esc>", { desc = "Save fil
 vim.keymap.set("n", "<leader>W", "<cmd>w<CR>", { desc = "Save file" })
 vim.keymap.set("n", "<leader>q", "<cmd>q<CR>", { desc = "Quit window" })
 vim.keymap.set("n", "<leader>Q", "<cmd>qa<CR>", { desc = "Quit all" })
-vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR><Esc>", { desc = "Clear search highlight" })
+-- Esc: close any floating window first (hover, diagnostics...),
+-- otherwise clear search highlight. Buffer-local maps (man float,
+-- Telescope, which-key) take precedence over this global one.
+vim.keymap.set("n", "<Esc>", function()
+  for _, w in ipairs(vim.api.nvim_list_wins()) do
+    local cfg = vim.api.nvim_win_get_config(w)
+    if cfg.relative and cfg.relative ~= "" then
+      pcall(vim.api.nvim_win_close, w, true)
+      return
+    end
+  end
+  vim.cmd("nohlsearch")
+end, { desc = "Close float / clear highlight" })
 -- Keep cursor centered on search / half-page jumps
 vim.keymap.set("n", "n", "nzzzv", { desc = "Next match centered" })
 vim.keymap.set("n", "N", "Nzzzv", { desc = "Prev match centered" })
