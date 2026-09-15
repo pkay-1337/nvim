@@ -120,7 +120,7 @@ Keybinds are core Neovim, nothing to do with plugins:
 ```lua
 vim.g.mapleader = " "   -- must be set BEFORE any <leader> maps
 vim.keymap.set("n", "<leader>ff", require("telescope.builtin").find_files, { desc = "Find Files" })
-vim.keymap.set("n", "<leader>T", ":NvimTreeToggle<CR>", { desc = "Tree" })
+vim.keymap.set("n", "<leader>e", ":NvimTreeToggle<CR>", { desc = "Tree" })
 vim.keymap.set({ "n", "t" }, "<leader>t", toggle_floating_terminal, { desc = "Float term" })
 ```
 

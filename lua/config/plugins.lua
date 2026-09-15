@@ -52,19 +52,29 @@ require("telescope").setup({
   },
 })
 
--- 3b. which-key: popup showing pending keys while you type.
--- Type <leader> (space) and pause -> lists buffers/find/tree/etc.
--- Type g, z, ", ', `, <C-w> -> shows those built-ins too.
+-- 3b. which-key: grouped leader menu.
+-- Space + pause -> Find / Buffer / Window / Code / Git groups + singles.
+-- Type g, z, ", ', `, <C-w> -> those built-ins too.
 require("which-key").setup({
   preset = "modern",
   delay = 300,
   spec = {
-    { "<leader>f", group = "Find/Telescope" },
-    { "<leader>b", group = "Buffers" },
-    { "<leader>s", group = "LSP/Switch" },
+    -- Leader families (space popup)
+    { "<leader>f", group = "Find (telescope)" },
+    { "<leader>b", group = "Buffer" },
+    { "<leader>w", group = "Window" },
+    { "<leader>c", group = "Code (LSP, per filetype)" },
     { "<leader>g", group = "Git" },
-    { "<leader>t", group = "Terminal" },
-    { "<leader>T", desc = "File tree" },
+    { "<leader>t", desc = "Floating terminal" },
+    { "<leader>e", desc = "File tree" },
+    { "<leader>E", desc = "Reveal file in tree" },
+    -- Built-in families (organizes the <leader>? full tree)
+    { "g", group = "Go to / LSP" },
+    { "gr", group = "LSP refactor" },
+    { "z", group = "Folds / spelling" },
+    { "[", group = "Previous…" },
+    { "]", group = "Next…" },
+    { "<C-w>", group = "Windows" },
   },
 })
 -- 4. Treesitter (main branch, Neovim 0.12 API).
@@ -125,7 +135,8 @@ vim.lsp.enable("clangd")
 
 -- Useful LSP keys once a server attaches (clangd included).
 -- gd = jump to definition, grr = references, grn = rename,
--- gra = code action, K = hover, [d / ]d = diagnostics.
+-- gra = code action, K = hover, [d / ]d = diagnostics,
+-- <leader>ch = switch header/source (clangd only, <leader>c Code group).
 vim.api.nvim_create_autocmd("LspAttach", {
   callback = function(args)
     local map = function(mode, lhs, rhs, desc)
@@ -138,7 +149,10 @@ vim.api.nvim_create_autocmd("LspAttach", {
     map("n", "gra", vim.lsp.buf.code_action, "Code action")
     map("n", "[d", vim.diagnostic.goto_prev, "Prev diagnostic")
     map("n", "]d", vim.diagnostic.goto_next, "Next diagnostic")
-    map("n", "<leader>sh", "<cmd>ClangdSwitchSourceHeader<CR>", "Switch header/source")
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
+    if client and client.name == "clangd" then
+      map("n", "<leader>ch", "<cmd>ClangdSwitchSourceHeader<CR>", "Switch header/source")
+    end
   end,
 })
 

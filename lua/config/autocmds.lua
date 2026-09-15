@@ -1,5 +1,6 @@
 -- Autocmds: filetype-specific behavior.
--- C/C++: format with clang-format (4-space style) via gg=G on <leader>f.
+-- C/C++ (<leader>c Code group): cf formats via clang-format (4-space),
+-- cm opens the man page for the word under cursor.
 
 vim.api.nvim_create_autocmd("FileType", {
   pattern = { "c", "cpp" },
@@ -8,10 +9,16 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.bo[args.buf].formatprg = format_cmd
     vim.bo[args.buf].equalprg = format_cmd
 
-    vim.keymap.set("n", "<leader>f", function()
+    vim.keymap.set("n", "<leader>cf", function()
       local view = vim.fn.winsaveview()
       vim.cmd("normal! gg=G")
       vim.fn.winrestview(view)
     end, { buffer = args.buf, desc = "Format C/C++ file" })
+
+    -- Man page for libc function / syscall under cursor.
+    -- Prefers section 2 then 3 (open -> open(2), printf -> printf(3)).
+    vim.keymap.set("n", "<leader>cm", function()
+      require("tools.man").open_cword()
+    end, { buffer = args.buf, desc = "Man page for word" })
   end,
 })
