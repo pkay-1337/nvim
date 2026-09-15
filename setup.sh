@@ -93,7 +93,9 @@ clone_or_update nvim-treesitter    https://github.com/nvim-treesitter/nvim-trees
 clone_or_update nvim-web-devicons  https://github.com/nvim-tree/nvim-web-devicons.git   5f032a85be210cd1c6ac98861eb3b187ff3bd5eb                      "$START_DIR/nvim-web-devicons"
 clone_or_update plenary.nvim       https://github.com/nvim-lua/plenary.nvim.git         74b06c6c75e4eeb3108ec01852001636d85a932b                      "$START_DIR/plenary.nvim"
 clone_or_update telescope.nvim     https://github.com/nvim-telescope/telescope.nvim.git v0.2.2                                                         "$START_DIR/telescope.nvim"
-clone_or_update which-key.nvim     https://github.com/folke/which-key.nvim.git          3aab2147e74890957785941f0c1ad87d0a44c15a                      "$START_DIR/which-key.nvim"
+# Branch-tracked (fast-moving, compat-critical): setup takes branch tip,
+# update.sh fast-forwards. Pinned SHAs below are just the last-verified state.
+clone_or_update which-key.nvim     https://github.com/folke/which-key.nvim.git          main                                                          "$START_DIR/which-key.nvim"
 # --- pack/vendor/opt (lazy-loaded) ---
 clone_or_update lazydev.nvim       https://github.com/folke/lazydev.nvim.git            ff2cbcba459b637ec3fd165a2be59b7bbaeedf0d                      "$OPT_DIR/lazydev.nvim"
 

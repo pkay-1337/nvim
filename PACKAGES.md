@@ -2,7 +2,9 @@
 
 > New system? Run `./setup.sh` — it checks system deps, clones all plugins
 > to their pinned refs, builds blink.cmp, installs treesitter parsers, and
-> smoke-tests. Everything below is the manual behind that script.
+> smoke-tests. `./update.sh` moves tracked plugins forward (snapshots pins
+> first); `./rollback.sh` restores pins from `versions.txt` or a snapshot.
+> Everything below is the manual behind those scripts.
 
 No `lazy.nvim`, no `vim.pack`, no internet on startup.
 Plugins are plain git repos sitting in a folder. Neovim loads them natively.

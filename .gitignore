@@ -2,3 +2,5 @@
 # setup.sh re-creates them from pinned refs on any system.
 # pack/versions.txt IS tracked — it records those pins.
 pack/vendor/
+# Pre-update snapshots are local-only; rollback.sh reads them.
+pack/snapshots/
