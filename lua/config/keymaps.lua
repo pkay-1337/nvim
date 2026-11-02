@@ -101,6 +101,16 @@ vim.keymap.set("n", "<Esc>", function()
   end
   vim.cmd("nohlsearch")
 end, { desc = "Close float / clear highlight" })
+-- Show the diagnostic (E/W) under the cursor. Falls back to the normal
+-- end-of-WORD motion when the line has no diagnostic.
+vim.keymap.set("n", "E", function()
+  local diags = vim.diagnostic.get(0, { lnum = vim.fn.line(".") - 1 })
+  if #diags > 0 then
+    vim.diagnostic.open_float({ border = "rounded" })
+  else
+    vim.cmd.normal({ args = { "E" }, bang = true })
+  end
+end, { desc = "Diagnostic under cursor (or E)" })
 -- Keep cursor centered on search / half-page jumps
 vim.keymap.set("n", "n", "nzzzv", { desc = "Next match centered" })
 vim.keymap.set("n", "N", "Nzzzv", { desc = "Prev match centered" })
