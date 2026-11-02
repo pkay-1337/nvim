@@ -5,6 +5,7 @@
 --   lua/config/options.lua  -> leader, UI, indent, clipboard (xclip)
 --   lua/config/plugins.lua  -> require().setup() for each plugin
 --   lua/config/keymaps.lua   -> all keybindings
+--   lua/config/tabline.lua   -> IDE-style buffer tabs (native, no plugin)
 --   lua/config/autocmds.lua  -> filetype rules (C/C++ format)
 --   lua/tools/floatterm.lua  -> floating terminal module
 -- See PACKAGES.md for how to add/update/remove plugins.
@@ -12,4 +13,5 @@
 require("config.options")
 require("config.plugins")
 require("config.keymaps")
+require("config.tabline").setup()
 require("config.autocmds")

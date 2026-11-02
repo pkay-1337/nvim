@@ -9,6 +9,30 @@ local ok_tb, builtin = pcall(require, "telescope.builtin")
 vim.keymap.set("n", "<leader>bn", ":bn<CR>", { desc = "Next buffer" })
 vim.keymap.set("n", "<leader>bp", ":bp<CR>", { desc = "Prev buffer" })
 vim.keymap.set("n", "<leader>bd", ":bd!<CR>", { desc = "Kill buffer" })
+
+local function cycle_buffer(dir)
+  local bufs = {}
+  for _, b in ipairs(vim.api.nvim_list_bufs()) do
+    if vim.fn.buflisted(b) == 1 and vim.bo[b].buftype == "" then
+      bufs[#bufs + 1] = b
+    end
+  end
+  if #bufs < 2 then
+    return
+  end
+  local cur = vim.api.nvim_get_current_buf()
+  local idx = 1
+  for i, b in ipairs(bufs) do
+    if b == cur then
+      idx = i
+      break
+    end
+  end
+  vim.api.nvim_set_current_buf(bufs[(idx - 1 + dir) % #bufs + 1])
+end
+
+vim.keymap.set("n", "<S-l>", function() cycle_buffer(1) end, { desc = "Next buffer" })
+vim.keymap.set("n", "<S-h>", function() cycle_buffer(-1) end, { desc = "Prev buffer" })
 -- Kill all buffers except the current one (like :only for windows).
 -- Modified buffers are kept; count is reported.
 vim.keymap.set("n", "<leader>bo", function()

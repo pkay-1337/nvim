@@ -37,6 +37,7 @@ require("nvim-tree").setup({
   view = { width = 30 },
   filters = { dotfiles = false },
   renderer = { group_empty = true, highlight_opened_files = "all" },
+  update_focused_file = { enable = true, update_root = false },
 })
 
 -- 3. Plenary before telescope (telescope requires it).
